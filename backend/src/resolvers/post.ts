@@ -33,7 +33,7 @@ export class PostResolver {
     }
     if (typeof title !== "undefined") {
       post.title = title;
-      await em.flush();
+      await em.persistAndFlush(post);
     }
     return post;
   }

@@ -46,7 +46,7 @@ let PostResolver = class PostResolver {
             }
             if (typeof title !== "undefined") {
                 post.title = title;
-                yield em.flush();
+                yield em.persistAndFlush(post);
             }
             return post;
         });

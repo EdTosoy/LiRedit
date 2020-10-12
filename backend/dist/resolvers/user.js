@@ -20,12 +20,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserResolver = void 0;
+exports.UserResolver = exports.UsernamePasswordInput = void 0;
 const type_graphql_1 = require("type-graphql");
 const User_1 = require("../entities/User");
-class UsernamePasswordInput {
-}
+const argon2_1 = __importDefault(require("argon2"));
+let UsernamePasswordInput = class UsernamePasswordInput {
+};
 __decorate([
     type_graphql_1.Field(),
     __metadata("design:type", String)
@@ -34,22 +38,31 @@ __decorate([
     type_graphql_1.Field(),
     __metadata("design:type", String)
 ], UsernamePasswordInput.prototype, "password", void 0);
+UsernamePasswordInput = __decorate([
+    type_graphql_1.InputType()
+], UsernamePasswordInput);
+exports.UsernamePasswordInput = UsernamePasswordInput;
 let UserResolver = class UserResolver {
-    resgister(options, { em }) {
+    register(options, { em }) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield em.create(User_1.User, { username: options.username });
+            const hashedPassword = yield argon2_1.default.hash(options.password);
+            const user = yield em.create(User_1.User, {
+                username: options.username,
+                password: hashedPassword,
+            });
+            yield em.persistAndFlush(user);
             return user;
         });
     }
 };
 __decorate([
-    type_graphql_1.Mutation(() => String),
+    type_graphql_1.Mutation(() => User_1.User),
     __param(0, type_graphql_1.Arg("options")),
     __param(1, type_graphql_1.Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [UsernamePasswordInput, Object]),
     __metadata("design:returntype", Promise)
-], UserResolver.prototype, "resgister", null);
+], UserResolver.prototype, "register", null);
 UserResolver = __decorate([
     type_graphql_1.Resolver()
 ], UserResolver);
