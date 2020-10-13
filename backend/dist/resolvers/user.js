@@ -101,7 +101,6 @@ let UserResolver = class UserResolver {
             }
             catch (error) {
                 console.log("message:", error.message);
-                s;
             }
             return {
                 user,
