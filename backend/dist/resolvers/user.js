@@ -25,8 +25,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserResolver = exports.UsernamePasswordInput = void 0;
-const type_graphql_1 = require("type-graphql");
 const User_1 = require("../entities/User");
+const type_graphql_1 = require("type-graphql");
 const argon2_1 = __importDefault(require("argon2"));
 let UsernamePasswordInput = class UsernamePasswordInput {
 };
